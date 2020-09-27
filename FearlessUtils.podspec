@@ -7,14 +7,14 @@
 #
 
 Pod::Spec.new do |s|
-  s.name             = 'FearlessUtils'
-  s.version          = '0.6.0'
+  s.name             = 'FearlessUtilsCopy'
+  s.version          = '0.7.0'
   s.summary          = 'Utility library that implements clients specific logic to interact with substrate based networks'
 
-  s.homepage         = 'https://github.com/soramitsu/fearless-utils-iOS'
+  s.homepage         = 'https://github.com/simondaigogogo/fearless-utils-iOS'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'ERussel' => 'rezin@soramitsu.co.jp' }
-  s.source           = { :git => 'https://github.com/soramitsu/fearless-utils-iOS.git', :tag => s.version.to_s }
+  s.source           = { :git => 'https://github.com/simondaigogogo/fearless-utils-iOS', :tag => s.version.to_s }
 
   s.ios.deployment_target = '11.0'
 

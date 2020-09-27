@@ -39,12 +39,15 @@ public struct KeystoreExtractor: KeystoreExtracting {
 
     public func extractFromDefinition(_ info: KeystoreDefinition,
                                       password: String?) throws -> KeystoreData {
-        guard let data = Data(base64Encoded: info.encoded) else {
+        guard let encoding = info.encoding, let type = encoding.type else {
+            throw KeystoreExtractorError.invalidBase64
+        }
+        guard let encoded = info.encoded, let data = Data(base64Encoded: encoded) else {
             throw KeystoreExtractorError.invalidBase64
         }
 
-        let keyDerivationName: String? = info.encoding.type.count > 0 ? info.encoding.type[0] : nil
-        let cipherType: String? = info.encoding.type.count > 1 ? info.encoding.type[1] : nil
+        let keyDerivationName: String? = type.count > 0 ? type[0] : nil
+        let cipherType: String? = type.count > 1 ? type[1] : nil
 
         let encodedData: Data
 
@@ -84,8 +87,11 @@ public struct KeystoreExtractor: KeystoreExtracting {
     }
 
     private func decodePkcs8(data: Data, definition: KeystoreDefinition) throws -> KeystoreData {
-        let contentType = definition.encoding.content.count > 0 ? definition.encoding.content[0] : nil
-        let cryptoTypeValue = definition.encoding.content.count > 1 ? definition.encoding.content[1] : nil
+        guard let encoding = definition.encoding, let content = encoding.content else {
+            throw KeystoreExtractorError.unsupportedContent
+        }
+        let contentType = content.count > 0 ? content[0] : nil
+        let cryptoTypeValue = content.count > 1 ? content[1] : nil
 
         guard contentType == KeystoreEncodingContent.pkcs8.rawValue else {
             throw KeystoreExtractorError.unsupportedContent
@@ -121,7 +127,8 @@ public struct KeystoreExtractor: KeystoreExtracting {
         let publicStart = dividerRange.endIndex
         let publicKeyData = Data(data[publicStart...])
 
-        return KeystoreData(address: definition.address,
+        let address = definition.address ?? ""
+        return KeystoreData(address: address,
                             secretKeyData: secretKeyData,
                             publicKeyData: publicKeyData,
                             cryptoType: cryptoType)

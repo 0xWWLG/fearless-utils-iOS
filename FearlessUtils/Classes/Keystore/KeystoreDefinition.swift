@@ -1,10 +1,10 @@
 import Foundation
 
 public struct KeystoreDefinition: Codable {
-    public let address: String
-    public let encoded: String
-    public let encoding: KeystoreEncoding
-    public let meta: KeystoreMeta
+    public let address: String?
+    public let encoded: String?
+    public let encoding: KeystoreEncoding?
+    public let meta: KeystoreMeta?
 
     public init(address: String,
                 encoded: String,
@@ -18,9 +18,9 @@ public struct KeystoreDefinition: Codable {
 }
 
 public struct KeystoreEncoding: Codable {
-    public let content: [String]
-    public let type: [String]
-    public let version: String
+    public let content: [String]?
+    public let type: [String]?
+    public let version: String?
 
     public init(content: [String], type: [String], version: String) {
         self.content = content
@@ -30,11 +30,8 @@ public struct KeystoreEncoding: Codable {
 }
 
 public struct KeystoreMeta: Codable {
-    enum CodingKeys: String, CodingKey {
-        case name
-        case created = "whenCreated"
-    }
-
-    public let name: String
-    public let created: Int64
+    public let name: String?
+    public let whenCreated: Int64?
+    public let genesisHash: String?
+    public let tags: [String]?
 }
